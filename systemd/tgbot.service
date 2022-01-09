@@ -1,14 +1,15 @@
 [Unit]
-Description=Course Bot
+Description=Telegram bot
+After=syslog.target
 After=network.target
 
 [Service]
-User=tgbot
-Group=tgbot
 Type=simple
-WorkingDirectory=/opt/tgbot
-ExecStart=/opt/tgbot/env/bin/python bot.py
+User=root
+WorkingDirectory=/usr/local/bin/bot
+ExecStart=/usr/bin/python3 /usr/local/bin/bot/bot.py
+RestartSec=10
 Restart=always
-
+ 
 [Install]
 WantedBy=multi-user.target
