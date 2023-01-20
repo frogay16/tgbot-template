@@ -1,4 +1,6 @@
 aiogram
 aioredis<2
+redis
 asyncpg
-environs~=8.0.0
+loguru
+pydantic

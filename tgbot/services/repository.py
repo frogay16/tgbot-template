@@ -10,7 +10,7 @@ class Repo:
     async def add_user(self, user_id) -> None:
         """Store user in DB"""
         await self.conn.execute(
-            "INSERT INTO Userss (user_id) VALUES ($1)",
+            "INSERT INTO users (user_id) VALUES ($1)",
             user_id,
         )
         return
@@ -18,6 +18,6 @@ class Repo:
     async def list_users(self) -> typing.List[int]:
         """List all bot users"""
         users = await self.conn.fetch(
-            "SELECT user_id FROM Userss"
+            "SELECT user_id FROM users"
         )
         return [user[0] for user in users]

@@ -2,13 +2,13 @@ import asyncpg
 import asyncio
 import logging
 from aiogram import Bot, Dispatcher
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
-#from aiogram.contrib.fsm_storage.redis import RedisStorage2
+# from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.contrib.fsm_storage.redis import RedisStorage2
+from loguru import logger
 from tgbot.utils.register_handlers import register_handlers
-from tgbot.data.config import BOT_TOKEN, PG_USERNAME, PG_PASSWORD, PG_HOST, PG_PORT, PG_DB
+from tgbot.data.config_reader import config
 from tgbot.middlewares.db import DbMiddleware
-
-logger = logging.getLogger(__name__)
+from tgbot.utils import logging
 
 
 async def create_pool(user, password, host, port, dp):
@@ -21,24 +21,34 @@ async def create_pool(user, password, host, port, dp):
 
 
 async def main():
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-    )
-    logger.error("Starting bot")
+    logging.setup()
 
-    storage = MemoryStorage()
-    #storage = RedisStorage2()
+    logger.error("Starting bot..")
 
-    pool = await create_pool(
-        user=PG_USERNAME,
-        password=PG_PASSWORD,
-        host=PG_HOST,
-        port=PG_PORT,
-        dp=PG_DB
+    try:
+        pool = await create_pool(
+            user=config.PG_USERNAME,
+            password=config.PG_PASSWORD.get_secret_value(),
+            host=config.PG_HOST,
+            port=config.PG_PORT,
+            dp=config.PG_DB
+        )
+    except ConnectionRefusedError:
+        logger.critical("[-] Connection to PostrgeSQL DB - FAILURE - abort the startup...")
+        return
+    else:
+        logger.success("[+] Connection to PostrgeSQL DB - SUCCESSFULLY")
+
+    # storage = MemoryStorage()
+    storage = RedisStorage2(
+        db=config.REDIS_DB_FSM,
+        host=config.REDIS_HOST,
+        port=config.REDIS_PORT,
+        password=config.REDIS_PASSWORD.get_secret_value()
     )
+
     bot = Bot(
-        token=BOT_TOKEN,
+        token=config.BOT_TOKEN,
         parse_mode="html"
     )
     dp = Dispatcher(bot, storage=storage)
