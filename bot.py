@@ -1,37 +1,27 @@
 import asyncpg
 import asyncio
 import logging
+from loguru import logger
 from aiogram import Bot, Dispatcher
 # from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
-from loguru import logger
-from tgbot.utils.register_handlers import register_handlers
 from tgbot.data.config_reader import config
 from tgbot.middlewares.db import DbMiddleware
 from tgbot.utils import logging
-
-
-async def create_pool(user, password, host, port, dp):
-    return await asyncpg.create_pool(user=user,
-                                     password=password,
-                                     host=host,
-                                     port=port,
-                                     database=dp
-                                     )
+from tgbot.utils.register_handlers import register_handlers
 
 
 async def main():
     logging.setup()
-
     logger.error("Starting bot..")
 
     try:
-        pool = await create_pool(
+        pool = await asyncpg.create_pool(
             user=config.PG_USERNAME,
             password=config.PG_PASSWORD.get_secret_value(),
             host=config.PG_HOST,
             port=config.PG_PORT,
-            dp=config.PG_DB
+            database=config.PG_DB
         )
     except ConnectionRefusedError:
         logger.critical("[-] Connection to PostrgeSQL DB - FAILURE - abort the startup...")
