@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "tgbot"
+version = "0.1.0"
+description = ""
+authors = ["3x0d2s-pc <exodus.yarwood@icloud.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiogram = "^2.25.1"
+aioredis = "<2"
+redis = "^4.5.5"
+asyncpg = "^0.27.0"
+loguru = "^0.7.0"
+pydantic = "^1.10.8"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

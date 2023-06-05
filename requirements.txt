@@ -1,6 +1,0 @@
-aiogram
-aioredis<2
-redis
-asyncpg
-loguru
-pydantic
