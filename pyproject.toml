@@ -7,12 +7,14 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-aiogram = "^2.25.1"
-aioredis = "<2"
 redis = "^4.5.5"
 asyncpg = "^0.27.0"
 loguru = "^0.7.0"
-pydantic = "^1.10.8"
+aiohttp = {extras = ["speedups"], version = "^3.8.4"}
+aiogram = {version = "^3.0.0b7", allow-prereleases = true}
+sqlalchemy = "^2.0.16"
+alembic = "^1.11.1"
+pydantic = {extras = ["dotenv"], version = "^1.10.9"}
 
 
 [build-system]

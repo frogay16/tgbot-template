@@ -19,5 +19,5 @@ class InterceptHandler(logging.Handler):
         logger_opt.log(self._get_level(record), record.getMessage())
 
 
-def setup():
-    logging.basicConfig(handlers=[InterceptHandler()], level=logging.DEBUG)
+def setup(debug: bool):
+    logging.basicConfig(handlers=[InterceptHandler()], level=logging.DEBUG if debug else logging.WARNING)

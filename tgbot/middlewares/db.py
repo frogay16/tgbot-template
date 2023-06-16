@@ -1,21 +1,20 @@
-from aiogram.dispatcher.middlewares import LifetimeControllerMiddleware
-from tgbot.services.repository import Repo
+from typing import Callable, Any, Awaitable
+from aiogram import BaseMiddleware
+from aiogram.types.base import TelegramObject
+from sqlalchemy.ext.asyncio import async_sessionmaker, AsyncSession
 
 
-class DbMiddleware(LifetimeControllerMiddleware):
-    skip_patterns = ["error", "update"]
-
-    def __init__(self, pool):
+class DBMiddleware(BaseMiddleware):
+    def __init__(self, pool: async_sessionmaker[AsyncSession]):
         super().__init__()
         self.pool = pool
 
-    async def pre_process(self, obj, data, *args):
-        db = await self.pool.acquire()
-        data["db"] = db
-        data["repo"] = Repo(db)
-
-    async def post_process(self, obj, data, *args):
-        del data["repo"]
-        db = data.get("db")
-        if db:
-            await db.close()
+    async def __call__(self,
+                       handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
+                       event: TelegramObject,
+                       data: dict[str, Any]) -> Any:
+        async with self.pool() as async_session:
+            data["db"] = async_session
+            result = await handler(event, data)
+            del data["db"]
+        return result
