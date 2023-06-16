@@ -1,4 +1,4 @@
 # tgbot-template
-A Telegram bot template using the asynchronous [aiogram](https://github.com/aiogram/aiogram) framework.
+A Telegram bot template using the asynchronous [aiogram-3.x](https://github.com/aiogram/aiogram) framework.
 
-The DBMS is PostgreSQL (lib. [asyncpg](https://github.com/MagicStack/asyncpg)).
+SQLAlchemy is used with the asyncpg database driver.
