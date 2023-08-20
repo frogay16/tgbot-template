@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     REDIS_DSN: RedisDsn
     LOGGING_MODE: str
 
+    def debug_status(self):
+        return True if self.LOGGING_MODE == "DEBUG" else False
+
     class Config:
         env_file = '.env'
         env_file_encoding = 'utf-8'

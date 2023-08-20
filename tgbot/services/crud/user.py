@@ -6,7 +6,7 @@ from tgbot.models.db.user import User as UserModel
 class User:
 
     def __init__(self, db: AsyncSession):
-        self.db = db
+        self.db: AsyncSession = db
 
     async def user_exists(self, user_tg_id: int) -> bool:
         """ Проверяет наличие пользователя в базе данных.  """
@@ -26,4 +26,8 @@ class User:
 
     async def commit(self):
         await self.db.commit()
+        return
+
+    async def refresh(self, instance: object):
+        await self.db.refresh(instance)
         return

@@ -14,14 +14,14 @@ from tgbot.models.db.base import create_pool
 async def main():
     config = Settings()
 
-    logging.setup(debug=True if config.LOGGING_MODE == "DEBUG" else False)
-
+    logging.setup(debug=config.debug_status())
     logger.warning("Starting bot..")
 
     bot = Bot(token=config.BOT_TOKEN.get_secret_value(), parse_mode="html")
     dp = Dispatcher(storage=RedisStorage.from_url(config.REDIS_DSN))
 
-    db_middleware = DBMiddleware(create_pool(config.PG_DSN, echo=True if config.LOGGING_MODE == "DEBUG" else False))
+    db_pool = create_pool(config.PG_DSN, echo=config.debug_status())
+    db_middleware = DBMiddleware(db_pool)
     dp.message.middleware(db_middleware)
     dp.callback_query.middleware(db_middleware)
 
