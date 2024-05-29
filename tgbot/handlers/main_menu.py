@@ -8,7 +8,7 @@ async def main_menu(msg: Message):
     await msg.answer(text=text)
 
 
-async def back_to_main_menu(call: CallbackQuery):
+async def main_menu_callback(call: CallbackQuery):
     text = "🔹 Главное меню"
     await call.message.edit_text(text=text)
     await call.answer()
@@ -16,6 +16,6 @@ async def back_to_main_menu(call: CallbackQuery):
 
 def register_handlers_base(dp: Dispatcher):
     router = Router(name=__name__)
-    router.callback_query.register(back_to_main_menu, F.data == "main_menu")
+    router.callback_query.register(main_menu_callback, F.data == "main_menu")
     dp.include_router(router)
 

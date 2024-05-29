@@ -2,8 +2,8 @@ from aiogram import types, Dispatcher, Router
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from sqlalchemy.ext.asyncio import AsyncSession
-from tgbot.services.crud.user import User as UserCrud
-from tgbot.handlers.main_menu import main_menu
+from services.crud.user import User as UserCrud
+from handlers.main_menu import main_menu
 
 
 async def command_start(msg: types.Message, db: AsyncSession, state: FSMContext):

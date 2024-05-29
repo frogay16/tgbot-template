@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 from tgbot.models.config_reader import Settings
-
+from tgbot.models.db.user import User
 from tgbot.models.db.base import Base
 
 # this is the Alembic Config object, which provides
@@ -16,7 +16,7 @@ config = context.config
 
 section = config.config_ini_section
 cf = Settings()
-config.set_section_option(section, "PG_DSN", cf.PG_DSN)
+config.set_section_option(section, "PG_DSN", str(cf.PG_DSN))
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.

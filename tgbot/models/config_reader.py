@@ -1,4 +1,5 @@
-from pydantic import BaseSettings, SecretStr, RedisDsn, PostgresDsn
+from pydantic import SecretStr, RedisDsn, PostgresDsn
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
